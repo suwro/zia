@@ -1,0 +1,21 @@
+# SYSTEMD Zia Reverse Proxy
+
+[Unit]
+Description=Zia Reverse Proxy
+After=local-fs.target network.target syslog.target
+
+[Service]
+Nice=10
+Type=simple
+User=daci
+Group=daci
+WorkingDirectory=/opt/zia
+ExecStart=/opt/zia/zia -c /opt/zia/config.json
+TimeoutStartSec=0
+RemainAfterExit=yes
+Restart=on-failure
+KillMode=process
+RestartSec=3s
+
+[Install]
+WantedBy=multi-user.target

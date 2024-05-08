@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.hostName}}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="content">
+    <div class="section">
+      <div class="container">
+        <h1 class="title m-2 is-2 has-text-black">Welcome to {{.hostName}}</h1>
+        <div class="is-hidden">
+          Req. Host: {{.reqHost}}
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div>Version: <span class="ver">{{.ver}}</span></div>
+    </footer>
+  </div>
+</body>
+</html>
