@@ -19,7 +19,7 @@ Zia is a reverse proxy written in go language. I needed a simple and fast revers
 - simple json config file
 - https mode with self-signed certificate
 
-###### requirements
+###### requirements:
 
 - golang installed
 - ipv4 network
@@ -70,13 +70,15 @@ Or you can do it manually:
 ```bash
 cd config/cert
 openssl genrsa -out ziaca.key 4096
-penssl req -new -x509 -days 3650 -key ziaca.key -out ziacert.pem -subj "/C=DE/ST=B/L=Berlin/O=Zia/OU=IT/CN=ZiaRootCA"
+openssl req -new -x509 -days 3650 -key ziaca.key -out ziacert.pem -subj "/C=DE/ST=B/L=Berlin/O=Zia/OU=IT/CN=ZiaRootCA"
 ```
 
 ##### Scheme
+
 ```mermaid
 graph
 X{Internet} --> A
 A[Zia Service] -- 10.0.0.20 --> B[http1.intranet]
 A[Zia Service] -- 10.0.1.20 -->C[http2.intranet]
 A[Zia Service] -- 10.1.1.20 -->D[http3.intranet]
+```
