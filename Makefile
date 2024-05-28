@@ -19,7 +19,7 @@ zip: clean zia
 
 cert:
 	cd config/cert && openssl genrsa -out ziaca.key 4096
-	cd config/cert && openssl req -new -x509 -days 3650 -key ziaca.key -out ziacert.pem -subj "/C=RO/ST=AR/L=Vladimiresci/O=Zia/OU=IT/CN=ZiaRootCA"
+	cd config/cert && openssl req -new -x509 -days 3650 -key ziaca.key -out ziacert.pem -subj "/C=RO/ST=AR/L=Arad/O=Zia/OU=IT/CN=ZiaRootCA"
 
 install:
 	sudo mkdir -p /opt/zia/

@@ -13,6 +13,6 @@ type Service struct {
 }
 
 type ziaProxy struct {
-	Host   string `json:"host" validate:"required,hostname"`
+	Host   string `json:"host" validate:"required"`
 	Target string `json:"target" validate:"required,url"`
 }

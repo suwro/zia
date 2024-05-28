@@ -23,9 +23,6 @@ func init() {
 }
 
 func InitConfig(configFile string) {
-	if configFile != "" {
-		configFile = `config.json`
-	}
 
 	// load config file
 	content, err := os.ReadFile(configFile)

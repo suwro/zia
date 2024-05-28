@@ -13,11 +13,11 @@ import (
 )
 
 func main() {
-	cfgFile := flag.String("c", "config/config.json", "config file")
+	cfgFile := flag.String("c", "config/config.json", "Config file")
 
 	flag.Parse()
 	proxy.InitConfig(*cfgFile)
-	proxy.Version = "0.0.4 beta"
+	proxy.Version = "0.0.5"
 
 	log.Println(proxy.Au.White("Zia"), "reverse proxy ver:", proxy.Au.Yellow(proxy.Version))
 
@@ -53,7 +53,7 @@ func main() {
 			NextProtos: []string{acme.ALPNProto},
 		}
 
-		log.Fatal(server.ListenAndServeTLS("ziacert.pem", "ziaca.key"))
+		log.Fatal(server.ListenAndServeTLS("config/cert/ziacert.pem", "config/cert/ziaca.key"))
 		return
 	}
 	log.Println("Starting http proxy:", proxy.Au.Yellow(proxy.Cfg.Service.IP), "port:", proxy.Au.Green(proxy.Cfg.Service.Port))
