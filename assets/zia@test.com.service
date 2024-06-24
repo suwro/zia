@@ -2,6 +2,7 @@
 # this is an example, just change the params with your values
 # remove timeout for no timeout settings
 # sudo systemctl enable --now zia zia@test.com
+# change your user name - please not root...
 
 [Unit]
 Description=Zia Reverse Proxy
@@ -10,8 +11,8 @@ After=local-fs.target network.target syslog.target
 [Service]
 Nice=10
 Type=simple
-User=daci
-Group=daci
+User=zia
+Group=zia
 WorkingDirectory=/opt/zia
 ExecStart=/opt/zia/zia -domain test.com -port 443 -targets https://10.0.0.1:8081,https://10.0.0.2:8082 -timeout 5
 TimeoutStartSec=0

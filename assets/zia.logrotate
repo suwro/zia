@@ -1,0 +1,12 @@
+/var/log/zia/*/*.log {
+    daily
+    rotate 30
+    compress
+    missingok
+    notifempty
+    create 0640 root root
+    sharedscripts
+    postrotate
+        /usr/bin/killall -HUP zia
+    endscript
+}
