@@ -5,21 +5,18 @@
 # change your user name - please not root...
 
 [Unit]
-Description=Zia Reverse Proxy
+Description=Zia Reverse Proxy HTTPS test.com
 After=local-fs.target network.target syslog.target
 
 [Service]
-Nice=10
 Type=simple
 User=zia
 Group=zia
 WorkingDirectory=/opt/zia
-ExecStart=/opt/zia/zia -domain test.com -port 443 -targets https://10.0.0.1:8081,https://10.0.0.2:8082 -timeout 5
-TimeoutStartSec=0
+ExecStart=/opt/zia/zia -domain test.com -port 443 -targets https://10.0.0.1:8081,https://10.0.0.2:8082 -timeout 5TimeoutStartSec=3
 RemainAfterExit=yes
-Restart=on-failure
-KillMode=process
-RestartSec=3s
+Restart=always
+RestartSec=10
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

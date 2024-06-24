@@ -1,12 +1,13 @@
-/var/log/zia/*/*.log {
+# Change test.com with your domain name
+/var/log/zia/test.com/acces_*.log {
     daily
-    rotate 30
+    rotate 60
     compress
     missingok
     notifempty
-    create 0640 root root
+    create 0640 daci daci
     sharedscripts
     postrotate
-        /usr/bin/killall -HUP zia
+        /usr/bin/systemctl restart zia@test.com.service
     endscript
 }

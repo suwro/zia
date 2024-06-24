@@ -2,3 +2,4 @@ build
 *.json
 config/cert/*
 old
+Makefile
