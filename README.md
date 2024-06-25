@@ -2,19 +2,24 @@
 
 ### A simple reverse proxy
 
-version: 0.3.1
+version: 0.3.2
 
 Zia is a reverse proxy written in Go language. It was created to provide a simple and fast way to access old Docker containers.
 
-version 0.3.1 simplified the execution without configuration file just params.
+- 0.3.2 fix
+  -ssl=false start without frontend ssl
+  -stdout=true redirect stdout and stderr to console instead logfile
+- 0.3.1 simplified the execution without configuration file just params.
 
 #### Features
 
 - Reverse proxy
-- SSL/TLS support with Let's Encrypt certificates
+- SSL/TLS frontend support with Let's Encrypt certificates
 - Round-robin load balancing
+- SSL/TLS targets with self-signed or CA signed
+- https->https targets, https->http targets, http->http targets, (http|https)->mixed targets
 - Configurable timeout for proxy connections
-- Access logging
+- Access logging on logfiles or stdout
 
 #### Requirements
 
@@ -48,16 +53,16 @@ This will start Zia as a reverse proxy on port 443, with SSL/TLS enabled using a
 zia -domain example.com -targets https://127.0.0.1:8020,https://10.0.0.10:8021 -timeout 5
 ```
 
-##### zia for example.com without ssl but targets has own signed certificate, no timeout
+##### zia for example.com without ssl but targets has own signed certificate, stdout logs
 
 ```bash
-zia -domain example.com -ssl false -targets https://127.0.0.1:8020,https://10.0.0.10:8021
+zia -domain example.com -ssl=false -stdout=false -targets https://127.0.0.1:8020,https://10.0.0.10:8021
 ```
 
 #### zia for example.com no ssl
 
 ```bash
-zia -domain example.com -port 80 -ssl false -targets http://127.0.0.1:8020,http://10.0.0.10:8021
+zia -domain example.com -port 80 -ssl=false -targets http://127.0.0.1:8020,http://10.0.0.10:8021
 ```
 
 ### zia for example.com without ssl single target

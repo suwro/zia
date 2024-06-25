@@ -19,7 +19,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
-var versiune = "0.3.1"
+var versiune = "0.3.2"
 
 func main() {
 	domain := flag.String("domain", "", "Domain name to use for the certificate")
@@ -28,9 +28,10 @@ func main() {
 	ver := flag.Bool("version", false, "Show version and exit")
 	targetList := flag.String("targets", "", "List of targets for proxy, comma separated")
 	timeout := flag.Int("timeout", 0, "Timeout for proxy in seconds, 0 no timeout")
+	stdout := flag.Bool("stdout", false, "Use stdout instead /var/log/zia/<domain>/acces_<port>.log")
 
 	flag.Parse()
-	log.Println("Versiune:", versiune)
+	log.Println("Versiune:", versiune, "SSL:", *ssl)
 	if *ver {
 		os.Exit(1)
 	}
@@ -45,37 +46,40 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Domain:", *domain, "Port:", *port, "Targets:", lista)
 
-	// log in fisier in loc de standard
-	logFileName := fmt.Sprintf("/var/log/zia/%s/acces_%d.log", *domain, *port)
-
-	// Salveaza log-urile in logs.txt
-	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("Error generating log file: %v", err)
+	// Logs
+	var logConfig = middleware.LoggerConfig{
+		Format: "${time_rfc3339}\t${remote_ip}\t${method}\t${uri}\t${status} ${error}\n",
 	}
 
-	// activeaza magia log-urilor
-	defer f.Close()
-	log.SetOutput(f)
+	if !*stdout {
+		// log in fisier in loc de standard
+		logFileName := fmt.Sprintf("/var/log/zia/%s/acces_%d.log", *domain, *port)
 
-	//c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationXMLCharsetUTF8)
+		// Salveaza log-urile in logs.txt
+		f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			log.Fatalf("Error generating log file: %v", err)
+		}
+
+		// activeaza magia log-urilor
+		defer f.Close()
+		log.SetOutput(f)
+		logConfig.Output = f
+	}
 
 	// Server http proxy
 	e := echo.New()
 	e.Use(middleware.Recover())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "${time_rfc3339}\t${remote_ip}\t${method}\t${uri}\t${status} ${error}\n",
-		Output: f,
-	}))
+	e.Use(middleware.LoggerWithConfig(logConfig))
 
 	// TLS Transport proxy
-	tlsConfig := &tls.Config{
-		MinVersion:         tls.VersionTLS12,
-		InsecureSkipVerify: true,
-	}
 	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
+		TLSClientConfig: &tls.Config{
+			//MinVersion:         tls.VersionTLS12,
+			InsecureSkipVerify: true,
+		},
 	}
 
 	// Proxy
@@ -105,6 +109,7 @@ func main() {
 
 	// server https
 	if *ssl {
+		log.Println("SSL/TLS enabled")
 		certPath := filepath.Join("config", "cert")
 		err = os.MkdirAll(certPath, os.ModePerm)
 		if err != nil {
@@ -129,6 +134,7 @@ func main() {
 		log.Fatal(s.ListenAndServeTLS("", ""))
 	} else {
 		// server http
+		log.Println("SSL/TLS disabled")
 		log.Fatal(s.ListenAndServe())
 	}
 }
@@ -153,11 +159,11 @@ func addTarget(lista []string) (ret []*middleware.ProxyTarget, err error) {
 
 // Intoarce lista de tinte
 func parseTargets(commaStrIn string) (ret []string, err error) {
-
 	if len(commaStrIn) == 0 {
 		err = fmt.Errorf("Proxy target list is empty!")
 	}
 
 	ret = strings.Split(commaStrIn, ",")
+	log.Printf("%#v\n", ret)
 	return
 }
