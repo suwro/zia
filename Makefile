@@ -1,5 +1,5 @@
 
-.PHONY: zia clean http_server saypcap
+.PHONY: zia clean test_target_server saypcap
 
 clean:
 	rm -rf ./build/ 2>/dev/null 2>&1
@@ -11,13 +11,10 @@ saypcap:
 zia: saypcap
 	GOOS=linux GOARCH=amd64 go build -a -o build/zia -ldflags "-s -w" zia.go; chmod +x build/zia
 
-test_http_server:
-	GOOS=linux GOARCH=amd64 go build -a -o build/test_http_server -ldflags "-s -w" testHttpServer/test_http_server.go; chmod +x build/test_http_server
+test_target_server:
+	GOOS=linux GOARCH=amd64 go build -a -o build/test_target_server -ldflags "-s -w" testTargetServer/test_target_server.go; chmod +x build/test_target_server
 
-test1:
-	GOOS=linux GOARCH=amd64 go build -a -o build/test1 -ldflags "-s -w" teste/single/single_tls.go; chmod +x build/test1
-
-zip: clean zia
+zip: clean zia test_target_server
 	cp zia.service build/
 	cd build && zip -r ../zia_reverse_proxy.zip *
 

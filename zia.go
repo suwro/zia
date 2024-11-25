@@ -19,9 +19,11 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
-var versiune = "0.3.2"
+var versiune = "0.3.3"
 
 func main() {
+	cert := flag.String("cert", "", "Certificate file")
+	key := flag.String("key", "", "Key file")
 	domain := flag.String("domain", "", "Domain name to use for the certificate")
 	port := flag.Int("port", 8080, "Port to listen on")
 	ssl := flag.Bool("ssl", true, "Use SSL/TLS default true")
@@ -39,6 +41,11 @@ func main() {
 	// verifica domeniu
 	if len(*domain) == 0 {
 		log.Fatal("Domain name is required")
+	}
+
+	if len(*cert) > 0 && len(*key) > 0 {
+		*ssl = true
+		log.Println("Certificate and key files provided")
 	}
 
 	// verifica lista de tinte proxy
@@ -110,28 +117,38 @@ func main() {
 	// server https
 	if *ssl {
 		log.Println("SSL/TLS enabled")
-		certPath := filepath.Join("config", "cert")
-		err = os.MkdirAll(certPath, os.ModePerm)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
 
-		// tls settings
-		autoTLSManager := autocert.Manager{
-			Prompt: autocert.AcceptTOS,
-			// Cache certificates to avoid issues with rate limits (https://letsencrypt.org/docs/rate-limits)
-			Cache:      autocert.DirCache(certPath),
-			HostPolicy: autocert.HostWhitelist(*domain),
-		}
-
-		// Configurare TLS/SSL a serverului http
 		s.TLSConfig = &tls.Config{
-			GetCertificate: autoTLSManager.GetCertificate,
-			NextProtos:     []string{acme.ALPNProto},
-			MinVersion:     tls.VersionTLS13,
+			MinVersion: tls.VersionTLS13,
 		}
 
-		log.Fatal(s.ListenAndServeTLS("", ""))
+		// Given cert and key
+		if len(*cert) > 0 || len(*key) > 0 {
+			log.Fatal(s.ListenAndServeTLS(*cert, *key))
+		} else {
+			// let's encrypt certificate
+			certPath := filepath.Join("config", "cert")
+			err = os.MkdirAll(certPath, os.ModePerm)
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			// tls settings
+			autoTLSManager := autocert.Manager{
+				Prompt: autocert.AcceptTOS,
+				// Cache certificates to avoid issues with rate limits (https://letsencrypt.org/docs/rate-limits)
+				Cache:      autocert.DirCache(certPath),
+				HostPolicy: autocert.HostWhitelist(*domain),
+			}
+
+			// Configurare TLS/SSL a serverului http
+			s.TLSConfig = &tls.Config{
+				GetCertificate: autoTLSManager.GetCertificate,
+				NextProtos:     []string{acme.ALPNProto},
+			}
+
+			log.Fatal(s.ListenAndServeTLS("", ""))
+		}
 	} else {
 		// server http
 		log.Println("SSL/TLS disabled")

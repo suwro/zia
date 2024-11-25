@@ -3,3 +3,4 @@ build
 config/cert/*
 old
 Makefile
+zia_reverse_proxy.zip

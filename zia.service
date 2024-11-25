@@ -1,0 +1,18 @@
+[Unit]
+Description=Proxy HTTPS ${DOMAIN_NAME}
+DefaultDependencies=no
+After=network.target
+
+[Service]
+Type=simple
+User=daci
+Group=daci
+WorkingDirectory=/opt/zia
+ExecStart=/opt/zia/zia -domain ${DOMAIN_NAME} -port 443
+TimeoutStartSec=0
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=3s
+
+[Install]
+WantedBy=default.target
