@@ -1,5 +1,5 @@
 [Unit]
-Description=Proxy HTTPS ${DOMAIN_NAME}
+Description=Zia Proxy HTTPS ${DOMAIN_NAME}
 DefaultDependencies=no
 After=network.target
 
@@ -8,7 +8,7 @@ Type=simple
 User=daci
 Group=daci
 WorkingDirectory=/opt/zia
-ExecStart=/opt/zia/zia -domain ${DOMAIN_NAME} -port 443
+ExecStart=/opt/zia/zia -config ${CONFIG}
 TimeoutStartSec=0
 RemainAfterExit=yes
 Restart=on-failure

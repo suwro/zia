@@ -9,13 +9,17 @@ saypcap:
 	echo "setcap CAP_NET_BIND_SERVICE=+eip /tmp/zia"
 
 zia: saypcap
-	GOOS=linux GOARCH=amd64 go build -a -o build/zia -ldflags "-s -w" zia.go; chmod +x build/zia
+	GOOS=linux GOARCH=amd64 go build -a -o build/zia -trimpath -ldflags "-s -w" zia.go; chmod +x build/zia
+
+rk3588: saypcap
+	GOOS=linux GOARCH=arm64 go build -a -o build/zia -trimpath -ldflags "-s -w" zia.go; chmod +x build/zia
 
 test_target_server:
-	GOOS=linux GOARCH=amd64 go build -a -o build/test_target_server -ldflags "-s -w" testTargetServer/test_target_server.go; chmod +x build/test_target_server
+	GOOS=linux GOARCH=amd64 go build -a -o build/test_target_server -trimpath -ldflags "-s -w" testTargetServer/test_target_server.go; chmod +x build/test_target_server
 
 zip: clean zia test_target_server
 	cp zia.service build/
+	cp -r static build/
 	cd build && zip -r ../zia_reverse_proxy.zip *
 
 cert:

@@ -3,6 +3,7 @@ module zia
 go 1.22.2
 
 require (
+	github.com/foolin/goview v0.3.0
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/suwro/zia v0.0.0-20240528133750-961f4ac30761
 	golang.org/x/crypto v0.24.0

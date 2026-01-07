@@ -14,7 +14,9 @@
       "debugAdapter": "dlv-dap",
       "mode": "debug",
       "program": "${workspaceRoot}/zia.go",
-
+      "args": [
+        "-config","config/config.json"
+      ]
     }
   ]
 }
