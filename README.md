@@ -2,12 +2,15 @@
 
 ### A simple reverse proxy written in Go
 
-version: <span style="color: orange">0.3.3</span>
+version: <span style="color: orange">0.3.4</span>
 
 Zia is a reverse proxy written in Go language. It was created to provide a simple and fast way to access old Docker containers. Meanwhile I realized I need also a simple reverse proxy for multiple http servers. So I decided to create it.
 If you have a real domain - zia will get the ssl certificate for it from Let's Encrypt.
 
 #### Implementation
+- 0.3.4
+  - implemented html error page to hide internal ip and real error message
+  - simplified default page renderer
 - 0.3.3
   - implemented config file
   - implemented acces list
@@ -88,6 +91,7 @@ zia -version
       "ip": "192.168.200.110",
       "name": "local dev host"
     }
+  ]
 }
 ```
 - <span style="color: lightblue">**port**</span>: (<span style="color: orange;">optional</span>) - tcp port to listen for connections, default is 443

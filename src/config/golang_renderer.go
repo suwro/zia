@@ -10,7 +10,7 @@ import (
 
 var (
 	Root            = "static/template"
-	Master          = "master.html"
+	Master          = "error"
 	DisableCache    = false
 	RenderPartials  = []string{} //[]string{"partials/menu"}
 	RenderFunctions = template.FuncMap{

@@ -7,17 +7,15 @@ import (
 )
 
 // Verifica daca adresa IP este in lista de IP-uri permise
-func AllowAccessMiddleware(allowedIPs []AllowedIP, domainName, noAccessPage string) echo.MiddlewareFunc {
+func AllowAccessMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			// Extrage adresa IP a cererii
 			remoteIP := c.RealIP()
 
-			println("DomainName:", domainName)
-
 			// Verifica daca adresa IP este in lista de IP-uri permise
 			allowed := false
-			for _, ipConfig := range allowedIPs {
+			for _, ipConfig := range CFG.AllowedIPs {
 				if ipConfig.Ip == remoteIP {
 					allowed = true
 					break
@@ -26,8 +24,8 @@ func AllowAccessMiddleware(allowedIPs []AllowedIP, domainName, noAccessPage stri
 
 			// Daca adresa IP nu este permisă, intoarce mesajul "OK"
 			if !allowed {
-				return c.Render(http.StatusOK, noAccessPage, echo.Map{
-					"domainName": domainName,
+				return c.Render(http.StatusOK, CFG.NoAccessPage, echo.Map{
+					"domainName": CFG.DomainName,
 					"ipAddress":  remoteIP,
 				})
 			}

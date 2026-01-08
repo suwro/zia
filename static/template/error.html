@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <title>{{.domainName}}</title>
+</head>
+<body>
+<style>
+  body {
+    font-family: "Nunito", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Optional: fundal ușor gri */
+  }
+  .content {
+    min-width: 300px;
+    min-height: 150px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Umbra ușoară */
+    padding: 20px;
+    box-sizing: border-box; /* Include padding în dimensiuni */
+    text-align: center;
+  }
+  .red {
+    color: darkred;
+  }
+</style>
+
+<div class="content">
+  <h1 class="red">Opps! Something went wrong.</h1>
+  <p>It seems the http server is unreachable.</br>
+    Please come back later, or contact the domain administrator.
+  </p>
+  <p>Your IP address is:<br/>
+    <span class="red" style="font-weight: bold">{{.ipAddress}}</span>.
+  </p>
+</div>
+
+</body>
+</html>

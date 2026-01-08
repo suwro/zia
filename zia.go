@@ -20,7 +20,7 @@ import (
 )
 
 // Versiunea aplicatiei
-var versiune = "0.3.3"
+var versiune = "0.3.4"
 
 func main() {
 	dev := flag.Bool("dev", false, "Dev mode")
@@ -85,7 +85,7 @@ func main() {
 
 	// Middleware Access List
 	if len(cfg.AllowedIPs) > 0 {
-		e.Use(config.AllowAccessMiddleware(cfg.AllowedIPs, cfg.DomainName, cfg.NoAccessPage))
+		e.Use(config.AllowAccessMiddleware()) //cfg.AllowedIPs, cfg.DomainName, cfg.NoAccessPage
 	}
 
 	// TLS Transport proxy
@@ -104,8 +104,9 @@ func main() {
 
 	balancer := middleware.NewRoundRobinBalancer(targets)
 	e.Use(middleware.ProxyWithConfig(middleware.ProxyConfig{
-		Balancer:  balancer,
-		Transport: transport,
+		Balancer:     balancer,
+		Transport:    transport,
+		ErrorHandler: config.FrontendHtmlErrorHandler,
 	}))
 
 	// http settings
