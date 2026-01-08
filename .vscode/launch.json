@@ -15,7 +15,7 @@
       "mode": "debug",
       "program": "${workspaceRoot}/zia.go",
       "args": [
-        "-config","config/config.json"
+        "-stdout", "-config","${workspaceRoot}/config/config.json"
       ]
     }
   ]

@@ -8,6 +8,10 @@ Zia is a reverse proxy written in Go language. It was created to provide a simpl
 If you have a real domain - zia will get the ssl certificate for it from Let's Encrypt.
 
 #### Implementation
+- 0.3.5
+  - changed middleware for allowed ip addresses to use memory cache
+  - implemented CIDR ip address validation for allowed ip
+  - config can now have a CIDR ip address in allowed ip list or a single ip address
 - 0.3.4
   - implemented html error page to hide internal ip and real error message
   - simplified default page renderer
@@ -85,12 +89,10 @@ zia -version
   "key":  "cert/localdev.key",
   "domain_name": "test.local",
   "no_access_page": "index.html",
-  "targets": ["http://127.0.0.1:8081", "http://192.168.200.110:8082"]
+  "targets": ["http://127.0.0.1:8081", "http://192.168.200.110:8082"],
   "allowed_ips": [
-    {
-      "ip": "192.168.200.110",
-      "name": "local dev host"
-    }
+    { "ip": "192.168.200.110", "name": "local dev host" },
+    { "ip": "10.0.10.0/24", "name": "vpn connection" }
   ]
 }
 ```

@@ -20,7 +20,7 @@ import (
 )
 
 // Versiunea aplicatiei
-var versiune = "0.3.4"
+var versiune = "0.3.5"
 
 func main() {
 	dev := flag.Bool("dev", false, "Dev mode")
